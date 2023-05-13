@@ -5,10 +5,13 @@ import { Order } from 'src/orders/orders.entity';
 export class CreateClientDto {
   @ApiProperty({ example: 'Николай', description: 'Имя' })
   firstName: string;
+
   @ApiProperty({ example: 'Петров', description: 'Фамилия' })
   lastName: string;
+
   @ApiProperty({ example: 'Большая Якиманка 32', description: 'Адрес' })
   address: string;
+
   @ApiProperty({
     example: [
       {
@@ -21,6 +24,7 @@ export class CreateClientDto {
     description: 'Список заказов',
   })
   orders: Order[];
+
   @ApiProperty({
     example: [
       {
@@ -32,5 +36,5 @@ export class CreateClientDto {
     description: 'Список курьеров',
   })
   couriers: Courier[];
-  // orders: Array<number>;
+  
 }

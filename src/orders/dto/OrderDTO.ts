@@ -24,5 +24,5 @@ export class CreateOrderDto {
   })
   clients: Client[];
   couriers: Courier[];
-  static id: number | FindOperator<number>;
+  // static id: number | FindOperator<number>;
 }

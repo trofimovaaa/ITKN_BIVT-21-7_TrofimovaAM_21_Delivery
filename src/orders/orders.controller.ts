@@ -16,27 +16,39 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @ApiOperation({ summary: 'Вывод всех заказов' })
   @Get()
   findAll() {
     return this.ordersService.findAll();
   }
+
+  @ApiOperation({ summary: 'Вывод заказа по id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Обновление данных заказа' })
   @Put(':id')
   update(@Param('id') id: string, @Body() updateOrder: Order) {
     return this.ordersService.update(+id, updateOrder);
   }
 
-  @Post()
   @ApiOperation({ summary: 'Создание заказа' })
+  @Post()
   create(@Body() createOrder: Order) {
-    // return this.ordersService.create(createOrder);
+    this.ordersService.create(createOrder);
   }
+
+  @ApiOperation({ summary: 'Удаление заказа' })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ordersService.remove(+id);
+  }
+
+  @ApiOperation({ summary: 'Получение неполной информации о заказе' })
+  @Get('incomplete')
+  findIncomplete() {
+    this.ordersService.findIncomplete();
   }
 }

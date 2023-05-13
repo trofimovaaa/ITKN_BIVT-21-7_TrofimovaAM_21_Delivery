@@ -1,17 +1,17 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { DatasourceService } from 'src/datasource/datasource.service';
+// import { DatasourceService } from 'src/datasource/datasource.service';
 import { Order } from './orders.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Client } from 'src/clients/client.entity';
 import { Courier } from 'src/couriers/courier.entity';
-import { CreateOrderDto } from './dto/OrderDTO';
+import { CreateOrderDto } from './dto/orderDto';
 import { IncompleteOrderDto } from './dto/incomplete-order.dto';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    private readonly datasourceService: DatasourceService,
+    // private readonly datasourceService: DatasourceService,
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>, // "внедряем" репозиторий Order в сервис
     @InjectRepository(Client)
@@ -26,17 +26,22 @@ export class OrdersService {
     order.plan = orderDto.plan; //заполняем поля объекта Order
     order.address_from = orderDto.address_from;
     order.address_to = orderDto.address_to;
-    // const client = await this.clientRepository.findBy({
-    //   //получаем массив Client по id
-    //   id: In(orderDto.clients),
-    // });
-    // order.clients = client;
-    const courier = await this.courierRepository.findBy({
-      //получаем массив Client по id
-      id: In(orderDto.couriers),
-    });
 
-    order.couriers = courier;
+    if (orderDto.clients) {
+      const client = await this.clientRepository.findBy({
+        //получаем массив Client по id
+        id: In(orderDto.clients),
+      });
+      order.clients = client;
+    }
+
+    if (orderDto.couriers) {
+      const courier = await this.courierRepository.findBy({
+        //получаем массив Client по id
+        id: In(orderDto.couriers),
+      });
+      order.couriers = courier;
+    }
 
     await this.orderRepository.save(order); //сохраняем объект Order в БД
     return order; //возвращаем объект Order

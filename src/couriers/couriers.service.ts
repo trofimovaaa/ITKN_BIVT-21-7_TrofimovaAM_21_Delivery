@@ -1,17 +1,17 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Client } from 'src/clients/client.entity';
-import { DatasourceService } from 'src/datasource/datasource.service';
+// import { DatasourceService } from 'src/datasource/datasource.service';
 import { Courier } from './courier.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from 'src/orders/orders.entity';
 import { In } from 'typeorm';
-import { CreateCourierDto } from './dto/CourierDTO';
+import { CreateCourierDto } from './dto/courierDto';
 import { IncompleteCourierDto } from './dto/incomplete-courier.dto';
 @Injectable()
 export class CouriersService {
   constructor(
-    private readonly datasourceService: DatasourceService,
+    // private readonly datasourceService: DatasourceService,
     @InjectRepository(Courier)
     private readonly courierRepository: Repository<Courier>, // "внедряем" репозиторий Author в сервис
     @InjectRepository(Order)
@@ -26,11 +26,13 @@ export class CouriersService {
 
     courier.firstName = courierDto.firstName; //заполняем поля объекта Courier
     courier.lastName = courierDto.lastName;
-    const orders = await this.orderRepository.findBy({
-      //получаем массив Client по id
-      id: In(courierDto.orders),
-    });
-    courier.orders = orders;
+    if (courierDto.orders) {
+      const orders = await this.orderRepository.findBy({
+        id: In(courierDto.orders),
+      });
+      courier.orders;
+    }
+
     await this.courierRepository.save(courier); //сохраняем объект Courier в БД
     return courier; //возвращаем объект Courier
   }

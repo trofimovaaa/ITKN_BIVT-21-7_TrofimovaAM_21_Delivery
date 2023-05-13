@@ -1,17 +1,16 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Courier } from 'src/couriers/courier.entity';
-import { DatasourceService } from 'src/datasource/datasource.service';
+
 import { Order } from 'src/orders/orders.entity';
 import { Client } from './client.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { CreateClientDto } from './dto/ClientDTO';
+import { CreateClientDto } from './dto/clientDto';
 import { IncompleteClientDto } from './dto/incomplete-clients.dto';
-import { CreateOrderDto } from 'src/orders/dto/OrderDTO';
+
 @Injectable()
 export class ClientsService {
   constructor(
-    // private readonly datasourceService: DatasourceService,
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
     @InjectRepository(Order)
@@ -19,28 +18,6 @@ export class ClientsService {
     @InjectRepository(Courier)
     private readonly courierRepository: Repository<Courier>, // "внедряем" репозиторий Courier в сервис
   ) {}
-
-  async createClient(clientDto: CreateClientDto): Promise<Client> {
-    //получаем объект CreateAuthorDto
-    const client = this.clientRepository.create(); //создаем объект Client из репозитория
-    client.firstName = clientDto.firstName; //заполняем поля объекта Client
-    client.lastName = clientDto.lastName;
-    client.address = clientDto.address;
-    const orders = await this.orderRepository.findBy({
-      //получаем массив Orders по id
-      id: In(clientDto.orders),
-    });
-
-    // const orders = await this.orderRepository.findOne({
-    //   where: { id: CreateOrderDto.id },
-    //   relations: { orders: true },
-    // });
-
-    client.orders = orders;
-
-    await this.clientRepository.save(client); //сохраняем объект client в БД
-    return client; //возвращаем объект client
-  }
 
   findOne(id: number): Promise<Client> {
     // Promise<Author> - указывает, что функция возвращает объект Client в виде Promise (c асинхронного потока)
@@ -50,6 +27,21 @@ export class ClientsService {
       relations: { orders: true, couriers: true },
       //получаем связанные объекты
     });
+  }
+
+  async createClient(clientDto: CreateClientDto): Promise<Client> {
+    //получаем объект CreateAuthorDto
+    const client = this.clientRepository.create(); //создаем объект Client из репозитория
+    client.firstName = clientDto.firstName; //заполняем поля объекта Client
+    client.lastName = clientDto.lastName;
+    client.address = clientDto.address;
+    console.log(clientDto.orders);
+    await this.clientRepository.save(client); //сохраняем объект client в БД
+    for (let _order of clientDto.orders) {
+      let order = this.orderRepository.create({ ..._order });
+      await this.orderRepository.save(order);
+    }
+    return client; //возвращаем объект client
   }
 
   async findAll(): Promise<Client[]> {
@@ -78,13 +70,7 @@ export class ClientsService {
   remove(id: number) {
     this.clientRepository.delete({ id }); //удаляем объект Author из БД
   }
-  // remove(id: number) {
-  //   const index = this.datasourceService
-  //     .getClients()
-  //     .findIndex((client) => client.id === id);
-  //   this.datasourceService.getClients().splice(index, 1);
-  //   return HttpStatus.OK;
-  // }
+
   async findIncomplete(): Promise<IncompleteClientDto[]> {
     const clients = await this.clientRepository.find(); //получаем массив Author из БД
     const incompleteAuthors: IncompleteClientDto[] = clients.map((client) => {
