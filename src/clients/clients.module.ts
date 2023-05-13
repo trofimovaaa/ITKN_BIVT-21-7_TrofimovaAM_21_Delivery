@@ -13,6 +13,7 @@ import { OrdersModule } from 'src/orders/orders.module';
   imports: [
     // DatasourceModule,
     CouriersModule,
+
     OrdersModule,
     ClientsModule,
     TypeOrmModule.forFeature([Client, Order, Courier]), // !!! В модуле автор мы используем все три сущности, поэтому все три сущности необходимо импортирвоать!],

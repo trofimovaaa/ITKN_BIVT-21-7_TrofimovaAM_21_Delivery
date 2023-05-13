@@ -6,6 +6,9 @@ import { OrdersModule } from './orders/orders.module';
 import { CouriersModule } from './couriers/couriers.module';
 import { Courier } from './couriers/courier.entity';
 import { Order } from './orders/orders.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -18,7 +21,7 @@ import { Order } from './orders/orders.entity';
       host: 'localhost', //хост, в нашем случае БД развернута локально
       synchronize: true, //отключаем автосинхронизацию(в противном случае при каждом перезапуске наша БД будет создаваться заново)
       logging: true, //включим логирование для удобства отслеживания процессов
-      entities: [Client, Courier, Order], //указываем путь к сущностям
+      entities: [Client, Courier, Order, User], //указываем путь к сущностям
       // synchronize: true,
       // migrationsTableName: 'migrations',
       // migrations: ['dist/src/migrations/*{.ts,.js}'],
@@ -26,6 +29,8 @@ import { Order } from './orders/orders.entity';
     ClientsModule,
     OrdersModule,
     CouriersModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
