@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -31,6 +34,9 @@ import { User } from './users/user.entity';
     CouriersModule,
     AuthModule,
     UsersModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'build'),
+    }),
   ],
   controllers: [],
   providers: [],

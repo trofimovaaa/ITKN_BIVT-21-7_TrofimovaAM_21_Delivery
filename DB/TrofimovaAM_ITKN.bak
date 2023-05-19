@@ -1,0 +1,362 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.1
+-- Dumped by pg_dump version 15.1 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: client_courier; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.client_courier (
+    client_id integer NOT NULL,
+    courier_id integer NOT NULL
+);
+
+
+ALTER TABLE public.client_courier OWNER TO postgres;
+
+--
+-- Name: client_order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.client_order (
+    client_id integer NOT NULL,
+    order_id integer NOT NULL
+);
+
+
+ALTER TABLE public.client_order OWNER TO postgres;
+
+--
+-- Name: clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.clients (
+    id integer NOT NULL,
+    "firstName" character varying NOT NULL,
+    "lastName" character varying NOT NULL,
+    address character varying NOT NULL
+);
+
+
+ALTER TABLE public.clients OWNER TO postgres;
+
+--
+-- Name: clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.clients_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.clients_id_seq OWNER TO postgres;
+
+--
+-- Name: clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.clients_id_seq OWNED BY public.clients.id;
+
+
+--
+-- Name: couriers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.couriers (
+    id integer NOT NULL,
+    "firstName" character varying NOT NULL,
+    "lastName" character varying NOT NULL,
+    "ordersId" integer
+);
+
+
+ALTER TABLE public.couriers OWNER TO postgres;
+
+--
+-- Name: couriers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.couriers_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.couriers_id_seq OWNER TO postgres;
+
+--
+-- Name: couriers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.couriers_id_seq OWNED BY public.couriers.id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.orders (
+    id integer NOT NULL,
+    plan character varying NOT NULL,
+    address_from character varying NOT NULL,
+    address_to character varying NOT NULL
+);
+
+
+ALTER TABLE public.orders OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.orders_id_seq OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
+
+--
+-- Name: clients id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clients ALTER COLUMN id SET DEFAULT nextval('public.clients_id_seq'::regclass);
+
+
+--
+-- Name: couriers id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.couriers ALTER COLUMN id SET DEFAULT nextval('public.couriers_id_seq'::regclass);
+
+
+--
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
+-- Data for Name: client_courier; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.client_courier (client_id, courier_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: client_order; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.client_order (client_id, order_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.clients (id, "firstName", "lastName", address) FROM stdin;
+1	Николай	Петров	Большая Якиманка 32
+2	Николай	Петров	Большая Якиманка 32
+3	Николай	Петров	Большая Якиманка 32
+4	Николай	Петров	Большая Якиманка 32
+5	Николай	Петров	Большая Якиманка 32
+\.
+
+
+--
+-- Data for Name: couriers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.couriers (id, "firstName", "lastName", "ordersId") FROM stdin;
+1	Олег	Соколов	\N
+2	Олег	Соколов	\N
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.orders (id, plan, address_from, address_to) FROM stdin;
+1	Оптима	Большая Никитская 1	Малая Бронная 12
+2	Оптима	Большая Никитская 1	Малая Бронная 12
+3	Базовый	Большая Якиманка 32	Ленинский проспект 100
+4	Оптима	Большая Никитская 1	Малая Бронная 12
+5	Оптима	Большая Никитская 1	Малая Бронная 12
+6	Базовый	Большая Якиманка 32	Ленинский проспект 100
+7	Базовый	Большая Якиманка 32	Ленинский проспект 100
+\.
+
+
+--
+-- Name: clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.clients_id_seq', 5, true);
+
+
+--
+-- Name: couriers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.couriers_id_seq', 2, true);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.orders_id_seq', 7, true);
+
+
+--
+-- Name: client_order PK_11c7b040ed0e9e811cc3ea78570; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order
+    ADD CONSTRAINT "PK_11c7b040ed0e9e811cc3ea78570" PRIMARY KEY (client_id, order_id);
+
+
+--
+-- Name: couriers PK_141c3ed6f70beb9ddf4ab4a0e86; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.couriers
+    ADD CONSTRAINT "PK_141c3ed6f70beb9ddf4ab4a0e86" PRIMARY KEY (id);
+
+
+--
+-- Name: client_courier PK_357cad92a48cd43126297bf10cf; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_courier
+    ADD CONSTRAINT "PK_357cad92a48cd43126297bf10cf" PRIMARY KEY (client_id, courier_id);
+
+
+--
+-- Name: orders PK_710e2d4957aa5878dfe94e4ac2f; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT "PK_710e2d4957aa5878dfe94e4ac2f" PRIMARY KEY (id);
+
+
+--
+-- Name: clients PK_f1ab7cf3a5714dbc6bb4e1c28a4; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clients
+    ADD CONSTRAINT "PK_f1ab7cf3a5714dbc6bb4e1c28a4" PRIMARY KEY (id);
+
+
+--
+-- Name: IDX_138e7696303555348743bf59d2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_138e7696303555348743bf59d2" ON public.client_order USING btree (order_id);
+
+
+--
+-- Name: IDX_5b28ca16324c7e69752ad71bb2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_5b28ca16324c7e69752ad71bb2" ON public.client_order USING btree (client_id);
+
+
+--
+-- Name: IDX_604255c2b5dce66da6fe3a6101; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_604255c2b5dce66da6fe3a6101" ON public.client_courier USING btree (courier_id);
+
+
+--
+-- Name: IDX_696ed33acf9ed3c689a46478e7; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_696ed33acf9ed3c689a46478e7" ON public.client_courier USING btree (client_id);
+
+
+--
+-- Name: client_order FK_138e7696303555348743bf59d21; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order
+    ADD CONSTRAINT "FK_138e7696303555348743bf59d21" FOREIGN KEY (order_id) REFERENCES public.orders(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: client_order FK_5b28ca16324c7e69752ad71bb27; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order
+    ADD CONSTRAINT "FK_5b28ca16324c7e69752ad71bb27" FOREIGN KEY (client_id) REFERENCES public.clients(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: client_courier FK_604255c2b5dce66da6fe3a61016; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_courier
+    ADD CONSTRAINT "FK_604255c2b5dce66da6fe3a61016" FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: client_courier FK_696ed33acf9ed3c689a46478e72; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_courier
+    ADD CONSTRAINT "FK_696ed33acf9ed3c689a46478e72" FOREIGN KEY (client_id) REFERENCES public.clients(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: couriers FK_d221e02586b632e8ae82fb77e27; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.couriers
+    ADD CONSTRAINT "FK_d221e02586b632e8ae82fb77e27" FOREIGN KEY ("ordersId") REFERENCES public.orders(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
